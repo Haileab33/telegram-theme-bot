@@ -46,7 +46,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Bot Token - Replace with your actual token
-BOT_TOKEN = "8211631557:AAHmJQSQsUF-cLrvCipuikSGa37jatrbG70"
+import os
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 
 # Pillow resampling compatibility
 try:
@@ -1113,6 +1114,14 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
 def main() -> None:
     """Start the bot."""
+    token = os.environ.get("BOT_TOKEN")
+    if not token:
+        logger.error("❌ BOT_TOKEN environment variable is not set!")
+        logger.error("Please set it in GitHub Secrets or .env file")
+        return
+    
+    application = Application.builder().token(token).build()
+    # ... rest of your code
     application = Application.builder().token(BOT_TOKEN).build()
     
     # Command handlers
